@@ -1,0 +1,43 @@
+<h1>Welcome, <%= current_user.first_name %> <%= current_user.last_name %></h1>
+
+    <fieldset> 
+        <legend><h2>Add Event</h2></legend>
+        
+        <form action="/groups" method="post">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <table>
+            <tr>
+           <td> Name:</td>
+            <td><input type="text" name="name"></td>
+            </tr>
+            <tr>
+            <td>Description:</td>
+            <td><textarea name="desc"></textarea></td>
+            </tr>
+            <tr>
+            <td><input type="submit" value="Add Organization"></td>
+            </tr>
+            </table>
+        </form>
+        
+        <ul>
+        <% if flash[:errors] %>
+            <% flash[:errors].each do |error| %>
+                <li><b><%=error%></b></li>
+            <% end %>
+        <% end %>
+        </ul>
+    </fieldset>
+
+<b><p>Here are the Organizations you may Join:</p></b>
+
+<% @org.each do |group| %>
+<a href="/groups/<%= group.id %>"><%= group.name %></a>
+<p>Members: <%= group.joined_users.count %></p>
+<p><%= group.desc %></p>
+    <% if group.user == current_user %>
+    <a href="/groups/<%=group.id%>/delete" data-method="delete">Delete</a>
+    <br><br>
+    <% end %>
+<% end %>
+
